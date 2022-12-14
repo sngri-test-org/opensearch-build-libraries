@@ -18,12 +18,12 @@ void call(Map args = [:]) {
     lib = library(identifier: 'jenkins@main', retriever: legacySCM(scm))
     def autoPublish = args.autoPublish ?: false
     println("Signing Maven artifacts.")
-    signArtifacts(
-            artifactPath: args.signingArtifactsPath,
-            type: 'maven',
-            platform: 'linux',
-            sigtype: '.asc'
-    )
+    //signArtifacts(
+    //        artifactPath: args.signingArtifactsPath,
+    //        type: 'maven',
+    //        platform: 'linux',
+    //        sigtype: '.asc'
+    //)
 
     println("Stage and Release Maven artifacts.")
     withCredentials([usernamePassword(credentialsId: 'jenkins-sonatype-creds', usernameVariable: 'SONATYPE_USERNAME', passwordVariable: 'SONATYPE_PASSWORD')]) {
