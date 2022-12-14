@@ -17,7 +17,7 @@
 void call(Map args = [:]) {
     lib = library(identifier: 'jenkins@main', retriever: legacySCM(scm))
     def autoPublish = args.autoPublish ?: false
-    def mavenStageRelease = libraryResource 'publish/stage-and-release.sh'
+    def mavenStageRelease = libraryResource 'publish/stage-maven-release.sh'
     writeFile file: "stage-maven-release.sh", text: mavenStageRelease
     sh "chmod a+x ./stage-maven-release.sh"
     println("Signing Maven artifacts.")
