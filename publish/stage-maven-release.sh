@@ -78,15 +78,6 @@ done
   exit 1
 }
 
-if [ ! -d "$1" ]; then
-  echo "Invalid directory $1 does not exist"
-  usage
-fi
-
-[ ! -d "$1"/org/opensearch ] && {
-  echo "Given directory does not contain opensearch artifacts"
-  usage
-}
 
 staged_repo=$1
 auto_publish=$2
