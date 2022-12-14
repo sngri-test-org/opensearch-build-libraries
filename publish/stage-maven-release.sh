@@ -119,14 +119,6 @@ EOF
 }
 
 function create_staging_repository() {
-  staging_repo_id=$(mvn --settings="${mvn_settings}" \
-    org.sonatype.plugins:nexus-staging-maven-plugin:rc-open \
-    -DnexusUrl="${REPO_URL}" \
-    -DserverId=nexus \
-    -DstagingProfileId="${STAGING_PROFILE_ID}" \
-    -DstagingDescription="Staging artifacts for build ${BUILD_ID}" \
-    -DopenedRepositoryMessageFormat="opensearch-staging-repo-id=%s" |
-    grep -E -o 'opensearch-staging-repo-id=.*$' | cut -d'=' -f2)
   echo "Opened staging repository ID $staging_repo_id"
 }
 
@@ -136,16 +128,6 @@ create_staging_repository
 echo "==========================================="
 echo "Deploying artifacts under ${artifact_path} to Staging Repository ${staging_repo_id}."
 echo "==========================================="
-
-mvn --settings="${mvn_settings}" \
-  org.sonatype.plugins:nexus-staging-maven-plugin:1.6.13:deploy-staged-repository \
-  -DrepositoryDirectory="${staged_repo}" \
-  -DnexusUrl="${REPO_URL}" \
-  -DserverId=nexus \
-  -DautoReleaseAfterClose=false \
-  -DstagingProgressTimeoutMinutes=30 \
-  -DstagingProfileId="${STAGING_PROFILE_ID}" \
-  -DstagingRepositoryId="${staging_repo_id}"
 
 echo "==========================================="
 echo "Done."
@@ -161,13 +143,7 @@ if [ "$auto_publish" = true ] ; then
     echo "Closing Staging Repository ${staging_repo_id}."
     echo "==========================================="
 
-    mvn --settings="${mvn_settings}" \
-      org.sonatype.plugins:nexus-staging-maven-plugin:1.6.13:rc-close \
-      -DnexusUrl="${REPO_URL}" \
-      -DserverId=nexus \
-      -DautoReleaseAfterClose=true \
-      -DstagingProfileId="${STAGING_PROFILE_ID}" \
-      -DstagingRepositoryId="${staging_repo_id}"
+   
 
     echo "==========================================="
     echo "Done."
@@ -177,12 +153,7 @@ if [ "$auto_publish" = true ] ; then
     echo "Release Staging Repository ${staging_repo_id}."
     echo "==========================================="
 
-    mvn --settings="${mvn_settings}" \
-      org.sonatype.plugins:nexus-staging-maven-plugin:1.6.13:rc-release \
-      -DnexusUrl="${REPO_URL}" \
-      -DserverId=nexus \
-      -DstagingProfileId="${STAGING_PROFILE_ID}" \
-      -DstagingRepositoryId="${staging_repo_id}"
+  
 
     echo "==========================================="
     echo "Done."
@@ -191,13 +162,7 @@ if [ "$auto_publish" = true ] ; then
     echo "==========================================="
     echo "Dropping Staging Repository ${staging_repo_id}."
     echo "==========================================="
-    mvn --settings="${mvn_settings}" \
-      org.sonatype.plugins:nexus-staging-maven-plugin:1.6.13:rc-drop \
-      -DnexusUrl="${REPO_URL}" \
-      -DserverId=nexus \
-      -DstagingProfileId="${STAGING_PROFILE_ID}" \
-      -DstagingRepositoryId="${staging_repo_id}"
-
+    
     echo "==========================================="
     echo "Done."
     echo "==========================================="
