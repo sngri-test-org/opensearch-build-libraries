@@ -17,6 +17,9 @@
 void call(Map args = [:]) {
     lib = library(identifier: 'jenkins@main', retriever: legacySCM(scm))
     def autoPublish = args.autoPublish ?: false
+    def mavenStageRelease = libraryResource 'publish/stage-and-release.sh'
+    writeFile file: "stage-maven-release.sh", text: mavenStageRelease
+    sh "chmod a+x ./stage-maven-release.sh"
     println("Signing Maven artifacts.")
     //signArtifacts(
     //        artifactPath: args.signingArtifactsPath,
@@ -27,6 +30,6 @@ void call(Map args = [:]) {
 
     println("Stage and Release Maven artifacts.")
     withCredentials([usernamePassword(credentialsId: 'jenkins-sonatype-creds', usernameVariable: 'SONATYPE_USERNAME', passwordVariable: 'SONATYPE_PASSWORD')]) {
-        sh("${WORKSPACE}/publish/stage-maven-release.sh ${args.mavenArtifactsPath} ${autoPublish}")
+        sh("./stage-maven-release.sh ${args.mavenArtifactsPath} ${autoPublish}")
     }
 }
