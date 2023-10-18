@@ -40,6 +40,7 @@ void call(Map args = [:]) {
     def buildManifest = null
 
     if (!isNullOrEmpty(args.bundleManifest as String)){
+        println("I am in the wrong condition")
         buildManifest = lib.jenkins.BuildManifest.new(readYaml(file: args.bundleManifest))
     }
 
