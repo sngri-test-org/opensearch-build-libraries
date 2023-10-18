@@ -41,6 +41,7 @@ void call(Map args = [:]) {
 
     if (!isNullOrEmpty(args.bundleManifest as String)){
         println("I am in the wrong condition")
+        println("The bendle manifest is ${args.bundleManifest}")
         buildManifest = lib.jenkins.BuildManifest.new(readYaml(file: args.bundleManifest))
     }
 
